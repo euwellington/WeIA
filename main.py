@@ -1,8 +1,8 @@
 from fastapi import FastAPI
-from src.api.endpoints import attachment, search
+from src.api.endpoints import attachment, search, history
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
-from fastapi.openapi.docs import get_swagger_ui_html
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI(
     title="WeIA API",
@@ -14,9 +14,16 @@ app = FastAPI(
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 @app.get("/docs", include_in_schema=False)
 async def custom_docs():
-
     html = """
     <!DOCTYPE html>
     <html>
@@ -50,10 +57,10 @@ async def custom_docs():
     </body>
     </html>
     """
-
     return HTMLResponse(html)
     
 prefix="/api/v1"
 
 app.include_router(attachment.router, prefix=prefix, tags=["attachment"])
 app.include_router(search.router, prefix=prefix, tags=["search"])
+app.include_router(history.router, prefix=prefix, tags=["history"])
