@@ -21,10 +21,6 @@ class SearchService:
 
     async def query(self, query: Query):
 
-
-        a = ""
-        b = a
-
         try:
 
             yield {"type": "status", "message": "otimizando_consulta"}
@@ -88,7 +84,7 @@ class SearchService:
 
             async for chunk in self.llm.generate(
                 system_prompt=prompt_system,
-                user_prompt=query.description,
+                user_prompt=query,
                 session_id=query.session_id
             ):
                 yield {

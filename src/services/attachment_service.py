@@ -41,8 +41,10 @@ class AttachmentService:
             self.database.save_data(chunks, embeddings, metadata)
             
             return {
-                "message" : "Arquivo salvo com sucesso"
+                "message" : "Arquivo salvo com sucesso",
+                "erro" : False
             }
             
         except Exception as e:
             raise f"erro: {e}"
+        

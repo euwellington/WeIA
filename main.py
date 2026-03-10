@@ -1,8 +1,20 @@
 from fastapi import FastAPI
-from src.api.endpoints import attachment, search, history
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
+
+# novos controllers
+from src.api.endpoints import (
+    auth_controller,
+    company_controller,
+    user_controller,
+    folder_controller,
+    search_controller,
+    attachment_controller,
+    history_controller,
+    file_controller,
+    ftp_controller
+)
 
 app = FastAPI(
     title="WeIA API",
@@ -58,9 +70,15 @@ async def custom_docs():
     </html>
     """
     return HTMLResponse(html)
-    
-prefix="/api/v1"
 
-app.include_router(attachment.router, prefix=prefix, tags=["attachment"])
-app.include_router(search.router, prefix=prefix, tags=["search"])
-app.include_router(history.router, prefix=prefix, tags=["history"])
+prefix = "/api/v1"
+
+app.include_router(attachment_controller.router, prefix=prefix, tags=["attachment"])
+app.include_router(search_controller.router, prefix=prefix, tags=["search"])
+app.include_router(history_controller.router, prefix=prefix, tags=["history"])
+app.include_router(auth_controller.router, prefix=prefix, tags=["auth"])
+app.include_router(company_controller.router, prefix=prefix, tags=["companies"])
+app.include_router(user_controller.router, prefix=prefix, tags=["users"])
+app.include_router(folder_controller.router, prefix=prefix, tags=["folders"])
+app.include_router(file_controller.router, prefix=prefix, tags=["files"])
+app.include_router(ftp_controller.router, prefix=prefix, tags=["ftp"])
